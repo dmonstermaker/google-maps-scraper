@@ -1,85 +1,85 @@
-# Google Maps Scraper API
+# Google Maps Scraper  
 
-A FastAPI service for scraping Google Maps data based on search queries. Ideal for n8n users.
+A lightweight, customizable web scraper built with **Playwright** to extract business listings from Google Maps. Perfect for gathering contact details, addresses, ratings, and more.  
 
-Very high performance, watch out for rate limiting!
+**Note:** This project is for **educational purposes only**. Always respect Google's Terms of Service and scraping policies.  
 
-Use variables to replace URL parameters
+---
 
-scrape-get?query=hotels%20in%2098392&max_places=100&lang=en&headless=true"
+## 📂 Output Examples  
+The data is saved in a folder named `GMaps Data` in a folder of the date the script was executed.
+Check the generated files to understand the data structure:  
+- **`niche in place.csv`**  
+- **`niche in place.xlsx`**  
+As you specified in either the command or the txt file (niche and place).
 
-If using n8n or other automation, use the /scrape-get endpoint for it to return results
+Each entry includes:  
+- Business name  
+- Rating (avg. and count)  
+- Contact info (phone, website)  
+- Address & location details  
+- Additional metadata (reviews, features, etc.)  
 
-simple install, copy files and run docker compose up -d
+---
 
-Intened to be used with this n8n build: 
-https://github.com/conor-is-my-name/n8n-autoscaling 
+## ⚙️ Installation  
 
-## API Endpoints
-
-**Parameters:**
-- `query` (required): Search query (e.g., "hotels in 98392")
-- `max_places` (optional): Maximum number of results to return
-- `lang` (optional, default "en"): Language code for results
-- `headless` (optional, default true): Run browser in headless mode
-
-### GET `/scrape-get`
-Alternative GET endpoint with same functionality
-
-### GET `/`
-Health check endpoint
-
-## Example Requests
-
-### GET Example
+### 1. Set Up a Virtual Environment (Recommended)  
 ```bash
-curl -X GET "http://localhost:8001/scrape" \
--H "Content-Type: application/json" \
--d '{
-  "query": "hotels in 98392",
-  "max_places": 10,
-  "lang": "en",
-  "headless": true
-}'
-```
+virtualenv venv  
+source venv/bin/activate  # Linux/Mac  
+venv\Scripts\activate     # Windows  
+```  
 
-### GET Example
+### 2. Install Dependencies  
 ```bash
-curl "http://localhost:8001/scrape-get?query=hotels%20in%2098392&max_places=10&lang=en&headless=true"
-```
-or
+pip install -r requirements.txt  
+playwright install chromium  # Headless browser for scraping  
+```  
 
+---
+
+## 🚀 How to Run  
+
+### Option 1: Single Search  
 ```bash
-curl "http://gmaps_scraper_api_service:8001/scrape-get?query=hotels%20in%2098392&max_places=10&lang=en&headless=true"
-```
-
-
-## Running the Service
-
-### Docker
+python3 main.py -s="<query>" -t=<result_count>  
+```  
+**Example:**  
 ```bash
-docker-compose up --build
-```
+python3 main.py -s="coffee shops in Seattle" -t=50  
+```  
 
-### Local Development
-1. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+### Option 2: Batch Searches (via `input.txt`)  
+1. Add queries to **`input.txt`** (one per line):  
+   ```text
+   dentists in Boston, MA  
+   plumbers in Austin, TX  
+   ```  
+2. Run the scraper:  
+   ```bash
+   python3 main.py -t=30  # Optional: Limit results per query  
+   ```  
 
-2. Run the API:
-```bash
-uvicorn gmaps_scraper_server.main_api:app --reload
-```
+---
 
+## 💡 Pro Tips  
 
-The API will be available at `http://localhost:8001`
+### Maximizing Results  
+Google Maps limits visible results (~120 per search). To bypass this:  
+- **Use granular queries** (e.g., split "US dentists" into city/state-level searches).  
+- **Combine keywords** (e.g., `"emergency dentist Chicago 24/7"`).  
 
-or for docker:
+### Customization  
+- Adjust **`main.py`** to scrape additional fields (e.g., hours, pricing).  
+- Modify **`playwright`** settings in `scraper.py` to change timeouts or headless mode.  
 
-`http://gmaps_scraper_api_service:8001`
+---
 
-## Notes
-- For production use, consider adding authentication
-- The scraping process may take several seconds to minutes depending on the number of results
-- Results format depends on the underlying scraper implementation
+## ❓ Troubleshooting  
+- **Slow scraping?** Add delays between requests (edit `scraper.py`).  
+- **Missing data?** Google may block frequent requests—try proxies or reduce speed.  
+
+--- 
+
+**Happy scraping!** 🛠️
