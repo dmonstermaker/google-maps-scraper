@@ -17,9 +17,6 @@ https://github.com/conor-is-my-name/n8n-autoscaling
 
 ## API Endpoints
 
-### POST `/scrape`
-Main scraping endpoint (recommended for production)
-
 **Parameters:**
 - `query` (required): Search query (e.g., "hotels in 98392")
 - `max_places` (optional): Maximum number of results to return
@@ -34,9 +31,9 @@ Health check endpoint
 
 ## Example Requests
 
-### POST Example
+### GET Example
 ```bash
-curl -X POST "http://localhost:8001/scrape" \
+curl -X GET "http://localhost:8001/scrape" \
 -H "Content-Type: application/json" \
 -d '{
   "query": "hotels in 98392",
